@@ -92,10 +92,20 @@ impl<'program> Interpreter<'program> {
                     Color::Blue => ColorRGB{r: 0, g: 0, b: 255},
                     Color::Black => ColorRGB{r: 0, g: 0, b: 0},
                 },
-                &Stmt::ChangeColorRGB(r, g, b) => turtle.color = ColorRGB{
+                /*&Stmt::ChangeColorRGB(r, g, b) => turtle.color = ColorRGB{
                     r: r as u8,
                     g: g as u8,
                     b: b as u8
+                },*/
+                &Stmt::ChangeColorRGB(r, g, b) => {
+                    if r == 42 {
+                        return Err(format!("Ccnnot be 42!!11!one"));
+                    }
+                    turtle.color = ColorRGB{
+                        r: r as u8,
+                        g: g as u8,
+                        b: b as u8,
+                    };
                 },
                 Stmt::Label(s) => { labels.entry(s).or_insert(pc); },
                 Stmt::Loop(l, c) => {
