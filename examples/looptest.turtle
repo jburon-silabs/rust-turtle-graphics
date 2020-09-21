@@ -7,7 +7,9 @@ color(RED)
 side:
 go_forward(30)
 corner:
+color(128, 0, 128)
 go_forward(5)
 turn(10)
 loop(corner, 8)
+color(RED)
 loop(side, 3)
