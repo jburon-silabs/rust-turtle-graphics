@@ -1,0 +1,29 @@
+use std::str::FromStr;
+use crate::ast;
+
+grammar;
+
+pub Program = <Statement*>;
+
+Statement: ast::Stmt = {
+    "pen_up" => ast::Stmt::PenUp,
+    "pen_down" => ast::Stmt::PenDown,
+    "go_forward" "(" <Number> ")" => ast::Stmt::Forward(<>),
+    "go_backward" "(" <Number> ")" => ast::Stmt::Backward(<>),
+    "turn" "(" <Number> ")" => ast::Stmt::Turn(<>),
+    "color" "(" <Color> ")" => ast::Stmt::ChangeColor(<>),
+    "color" "(" <Number> "," <Number> "," <Number> ")"
+        => ast::Stmt::ChangeColorRGB(<>),
+    <LabelName> ":" => ast::Stmt::Label(<>),
+    "loop" "(" <LabelName> "," <Number> ")" => ast::Stmt::Loop(<>),
+}
+
+Number: i32 = <s:r"-*[0-9]+"> => i32::from_str(s).unwrap();
+LabelName: String = <s:r"[a-zA-Z]+[a-zA-Z0-9]*"> => s.to_string();
+
+Color: ast::Color = {
+    "RED" => ast::Color::Red,
+    "GREEN" => ast::Color::Green,
+    "BLUE" => ast::Color::Blue,
+    "BLACK" => ast::Color::Black,
+}
