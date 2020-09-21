@@ -5,8 +5,8 @@ use std::io::{Write, Error};
 
 use turtle::ast::*;
 
-//// draw_the_world(&vec!<Line>, ) - 
-fn draw_the_world(world: &Vec<Line>) -> Result<(), Error> {
+//// draw_the_world(&vec!<Line>, world_width: Option<isize>, world_height: Option<isize> ) - 
+fn draw_the_world(world: &Vec<Line>, world_width: Option<isize>, world_height: Option<isize>) -> Result<(), Error> {
     let path = "svg_rendering.html";
 
     let mut output = File::create(path)?;
@@ -15,7 +15,7 @@ fn draw_the_world(world: &Vec<Line>) -> Result<(), Error> {
     let svg_footer = "</svg>";
 
     write!(output, "{}\n", html_header)?;
-    write!(output, "<svg width=\"{}\" height=\"{}\">\n", 200, 200)?;
+    write!(output, "<svg width=\"{}\" height=\"{}\">\n", world_width.unwrap_or(200), world_height.unwrap_or(200))?;
     // write line from vector 
         for lines in world {
             write!(
@@ -82,12 +82,12 @@ fn main() {
         },
     };
 
-
-    let status = draw_the_world(&world);
+    let status = draw_the_world(&world, None, None); // Use this for default world size (200x200)
+    // let status = draw_the_world(&world, Some(300), Some(300)); // Use this for custom world size
 
     match status {
         Ok(v) => println!("Done {:?}", v),
-        Err(e) => println!("error parsing header: {:?}", e),
+        Err(e) => println!("Error writing file: {:?}", e),
     }
 }
 
